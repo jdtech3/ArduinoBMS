@@ -10,7 +10,8 @@ void setup() {
   Serial.println("ArduinoBMS up!");
 
   bms.begin();
-  bms.check_connection();
+  bms.fet_enable();
+  bms.set_fets(true);
 
 
   // Wire.begin();

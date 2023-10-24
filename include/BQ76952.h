@@ -5,6 +5,7 @@
 #include <Wire.h>
 
 #include "BQ76952_registers.h"
+#include "BQ76952_commands.h"
 
 #define I2C_ADDR            0x08
 #define REG_SUBCMD_LOWER    0x3E
@@ -24,6 +25,8 @@ class BQ76952 {
         void reset();
         void send_cmd(CMD_TYPE, uint16_t);
         fet_status_t get_fet_status();
+        void set_fets(bool);
+        void fet_enable();
         bool check_connection();
     private:
         byte _i2c_addr;

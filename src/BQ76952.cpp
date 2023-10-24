@@ -13,8 +13,16 @@ void BQ76952::begin() {
     memset(_xfer_buf, 0, 32 * sizeof(byte));
 }
 
+void BQ76952::set_fets(bool on) {
+    _send_subcmd(on ? CMD_ALL_FETS_ON : CMD_ALL_FETS_OFF, false);
+}
+
+void BQ76952::fet_enable() {
+    _send_subcmd(CMD_FET_ENABLE, false);
+}
+
 fet_status_t BQ76952::get_fet_status() {
-    _send_direct_cmd(0x7F, 1);
+    _send_direct_cmd(CMD_FET_STATUS, 1);
     
     fet_status_t status = {
         .ALRT_PIN = _direct_cmd_resp_buf[0] & 0b01000000,
@@ -136,38 +144,40 @@ bool BQ76952::_block_until_subcmd_complete(uint16_t subcmd) {
 
 bool BQ76952::check_connection() {
     // check for magic (device number)
-    // delay(500);
-    // char out_buf[16];
-    // _send_subcmd(0x001F, false);
-    // _send_subcmd(0x0020, false);
-    // _send_direct_cmd(0x64, 2);
-    // delay(1000);
+    // TODO!
+    
+    // // delay(500);
+    // // char out_buf[16];
+    // // _send_subcmd(0x001F, false);
+    // // _send_subcmd(0x0020, false);
+    // // _send_direct_cmd(0x64, 2);
+    // // delay(1000);
+    // // _send_direct_cmd(0x7F, 1);
+    // // _send_direct_cmd(0x7F, 1);
+    // // delay(1000);
+    // // _send_subcmd(0x0057, true);
+    // // delay(1000);
+    // // _send_subcmd(0x0022, false);
+    // // delay(1000);
+    // // _send_subcmd(0x0057, true);
+    // // delay(1000);
+    // // _send_subcmd(0x0096, false);
+    // // delay(1000);
+    // // _send_subcmd(0x001F, false);    // CHG
+    // // _send_subcmd(0x0020, false); // DSG
+    // delay(100);
     // _send_direct_cmd(0x7F, 1);
-    // _send_direct_cmd(0x7F, 1);
-    // delay(1000);
-    // _send_subcmd(0x0057, true);
-    // delay(1000);
+    // delay(10);
     // _send_subcmd(0x0022, false);
-    // delay(1000);
-    // _send_subcmd(0x0057, true);
-    // delay(1000);
+    // delay(10);
     // _send_subcmd(0x0096, false);
     // delay(1000);
-    // _send_subcmd(0x001F, false);    // CHG
-    // _send_subcmd(0x0020, false); // DSG
-    delay(100);
-    _send_direct_cmd(0x7F, 1);
-    delay(10);
-    _send_subcmd(0x0022, false);
-    delay(10);
-    _send_subcmd(0x0096, false);
-    delay(1000);
-    _send_direct_cmd(0x7F, 1);
-    delay(5000);
-    while (1) {
-        _send_subcmd(0x0075, true);
-        delay(60000);
-    }
+    // _send_direct_cmd(0x7F, 1);
+    // delay(5000);
+    // while (1) {
+    //     _send_subcmd(0x0075, true);
+    //     delay(60000);
+    // }
         
     // int bytes_read = _send_subcmd(0x0057, true);
     // if (bytes_read > 0) {
